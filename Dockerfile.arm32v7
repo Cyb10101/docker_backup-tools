@@ -24,7 +24,7 @@ RUN apk add --no-cache bash openssh rsync rdiff-backup php7 php7-curl
 COPY .shell-methods.sh .bashrc /root/
 COPY .shell-methods.sh .bashrc /home/application/
 COPY --from=golang /go/rotate /usr/local/bin/
-COPY conf/ /opt/docker/
+COPY config/ /opt/docker/
 RUN set -x && \
   chmod +x /opt/docker/bin/* && \
   /opt/docker/bin/bootstrap.sh
