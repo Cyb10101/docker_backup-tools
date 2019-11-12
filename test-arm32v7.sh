@@ -15,7 +15,7 @@ removeContainer() {
 docker run --rm --privileged multiarch/qemu-user-static:register --reset
 
 removeContainer
-docker build --rm -t ${dockerImage} -f Dockerfile . && \
+docker build --rm -t ${dockerImage} -f Dockerfile.arm32v7 . && \
 docker run --rm -d --name ${dockerContainer} \
   -v /home/${USER}/projects/docker_backup-tools/backup:/root/backup \
   -v /home/${USER}/projects/docker_backup-tools/docker/entrypoints:/entrypoint.d \
