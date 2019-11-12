@@ -2,6 +2,7 @@ FROM multiarch/qemu-user-static:x86_64-arm as qemu
 
 # Go compiler
 FROM golang:alpine as golang
+COPY --from=qemu /usr/bin/qemu-arm-static /usr/bin/
 
 ENV GOOS="linux" \
     GOARCH="arm32" \
