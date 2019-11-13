@@ -20,7 +20,7 @@ Technically, they can contain anything.
 
 Via a script entry point, cron jobs can be added.
 
-See file [development.sh](config/entrypoints/development.php).
+See file [development.sh](entrypoints/development.php).
 
 File `website.sh`:
 
@@ -37,8 +37,8 @@ It's the entry point for a backup through the cron job.
 
 See files:
 
-* [development_www.sh](config/scripts/development_www.sh).
-* [development_www.php](config/scripts/development_www.php).
+* [development_www.sh](scripts/development_www.sh).
+* [development_www.php](scripts/development_www.php).
 
 File `website_www.sh`:
 
