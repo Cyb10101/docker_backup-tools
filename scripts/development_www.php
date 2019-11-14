@@ -4,7 +4,7 @@ class Cron {
     protected $cronFilename = 'development.php';
 
     public function cronLog(string $message) {
-        echo 'Cron \'' . $this->cronFilename . '\': ' . $message . PHP_EOL;
+        echo date('Y-m-d H:i') . ' Cron \'' . $this->cronFilename . '\': ' . $message . PHP_EOL;
     }
 }
 $cron = new Cron();

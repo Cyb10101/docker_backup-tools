@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 set -e
+source /opt/docker/bin/functions.sh
 
-echo "Cron: Executing $(basename ${0})"
+cronLog 'Starting...'
 
-echo "BASH: $(date '+%F %H:%M:%S')" >> /root/development.txt
+echo "BASH: $(date '+%F %H:%M')" >> /root/development.txt
 
-echo "Cron: Finished $(basename ${0})"
+cronLog 'Finished.'
