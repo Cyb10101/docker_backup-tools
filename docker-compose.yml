@@ -4,6 +4,8 @@ services:
   backup:
     image: cyb10101/backup-tools
     hostname: backup-tools
+    # Bugfix: sleep: cannot read realtime clock: Operation not permitted
+    privileged: true
     volumes:
       # Your backup folder
       - ./backup:/root/backup
