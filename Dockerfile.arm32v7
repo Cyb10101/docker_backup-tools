@@ -13,6 +13,8 @@ RUN go build rotate.go
 
 # Main
 FROM arm32v7/ubuntu:20.04
+COPY --from=qemu /usr/bin/qemu-arm-static /usr/bin/
+
 ENV DEBIAN_FRONTEND=noninteractive \
     TIMEZONE=Europe/Berlin
 
