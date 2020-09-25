@@ -1,5 +1,5 @@
 # Go compiler
-FROM golang:alpine as golang
+FROM golang as golang
 
 ENV GOOS="linux" \
     GOARCH="amd64"
@@ -9,16 +9,15 @@ COPY go/ /go/
 RUN go build rotate.go
 
 # Main
-FROM alpine
+FROM ubuntu:20.04
+ENV DEBIAN_FRONTEND=noninteractive \
+    TIMEZONE=Europe/Berlin
 
-ENV LOG_STDOUT="" \
-    LOG_STDERR="" \
-    TIMEZONE="Europe/Berlin"
-
-RUN apk add --no-cache bash openssh rsync rdiff-backup php7 php7-curl
+RUN apt-get update && \
+    apt-get install -y openssh-client less vim tzdata cron php php-curl rdiff-backup && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY .shell-methods.sh .bashrc /root/
-COPY .shell-methods.sh .bashrc /home/application/
 COPY --from=golang /go/rotate /usr/local/bin/
 COPY config/ /opt/docker/
 RUN set -x && \

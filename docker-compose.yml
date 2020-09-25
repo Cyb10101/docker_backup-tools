@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  backup:
+    image: cyb10101/backup-tools
+    hostname: backup-tools
+    volumes:
+      # Your backup folder
+      - ./backup:/root/backup
+
+      # Your scripts folder to write crontab.txt and execute scripts
+      - ./scripts:/root/scripts
+
+      # If you want fancy ssh
+      #- ./ssh:/root/.ssh
+
+      # If you want custom entrypoints
+      #- ./entrypoints:/entrypoint.d
+    environment:
+      - TIMEZONE=Europe/Berlin

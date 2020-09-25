@@ -4,6 +4,6 @@ source /opt/docker/bin/functions.sh
 
 cronLog 'Starting...'
 
-echo "BASH: $(date '+%F %H:%M')" >> /root/development.txt
+echo "BASH: $(date '+%F %H:%M')" >> /root/backup/development.txt
 
 cronLog 'Finished.'

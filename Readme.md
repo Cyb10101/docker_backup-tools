@@ -4,33 +4,12 @@ System with backup tools. The backups are then started via own cron jobs.
 
 Docker: [cyb10101/backup-tools](https://hub.docker.com/repository/docker/cyb10101/backup-tools)
 
-## Mounts
-
-```text
-./backup : /root/backup
-./config/entrypoints : /entrypoint.d
-./config/scripts : /root/scripts
-./config/ssh : /root/.ssh
-```
+See: [docker-compose.yaml](docker-compose.yaml)
 
 ## Entry points
 
 The entry points are executed the first time the container is started.
 Technically, they can contain anything.
-
-### Entry points: Cron jobs
-
-Via a script entry point, cron jobs can be added.
-
-See file [development.sh](entrypoints/development.php).
-
-File `website.sh`:
-
-```bash
-#!/usr/bin/env bash
-echo '* * * * * /root/scripts/website_www.sh >&/docker.stdout' >> /etc/crontabs/root
-echo '* * * * * cd /root/scripts && /usr/bin/php -d memory_limit=1G ./website_www.php >&/docker.stdout' >> /etc/crontabs/root
-```
 
 ## Backup: Default script
 

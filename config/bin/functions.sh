@@ -2,7 +2,7 @@
 set -e
 
 cronLog() {
-  echo "$(date '+%F %H:%M') Cron '$(basename ${0})': ${1}"
+  echo "$(date '+%F %H:%M') Cron '$(basename ${0})': ${1}" >> /proc/1/fd/1
 }
 
 createFolder() {
