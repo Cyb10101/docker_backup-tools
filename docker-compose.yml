@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   backup:
+    #build: .
     image: cyb10101/backup-tools
     hostname: backup-tools
     # Bugfix: sleep: cannot read realtime clock: Operation not permitted

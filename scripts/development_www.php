@@ -14,5 +14,6 @@ $cron->cronLog('Starting...');
 
 # Your backup script
 file_put_contents('/root/backup/development.txt', 'PHP:  ' . date('Y-m-d H:i:s') . PHP_EOL,  FILE_APPEND);
+echo 'PHP Output: ' . date('Y-m-d H:i:s') . PHP_EOL;
 
 $cron->cronLog('Finished.');
