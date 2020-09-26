@@ -15,4 +15,4 @@ chmod 666 ${CRONTAB_FILE}
 crontab ${CRONTAB_FILE}
 
 # Start cron daemon
-/usr/sbin/cron
+#/usr/sbin/cron

@@ -1,6 +1,0 @@
-# Run every second
-#* * * * * /root/scripts/development_www.sh > /proc/1/fd/1
-#* * * * * cd /root/scripts && /usr/bin/php -d memory_limit=1G ./development_www.php > /proc/1/fd/1
-
-# Refresh crontab (or restart container)
-* * * * * crontab /root/scripts/crontab.txt > /proc/1/fd/1
