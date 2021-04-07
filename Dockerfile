@@ -4,7 +4,7 @@ FROM golang as golang
 ENV GOOS="linux" \
     GOARCH="amd64"
 
-WORKDIR /go
+WORKDIR /go/src/rotate
 COPY go/ /go/
 RUN go build rotate.go
 
@@ -18,7 +18,7 @@ RUN apt-get update && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 ADD rootfs/ /
-COPY --from=golang /go/rotate /usr/local/bin/
+COPY --from=golang /go/src/rotate/rotate /usr/local/bin/
 
 RUN set -x && \
   chmod +x /opt/docker/bin/* && \

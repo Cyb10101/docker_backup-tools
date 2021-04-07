@@ -5,7 +5,7 @@ import (
   "fmt"
   "strconv"
   "os"
-  "./packages"
+  "cyb10101/rotate/packages"
 )
 
 func isFile(fileName string) bool {
