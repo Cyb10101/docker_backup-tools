@@ -138,6 +138,8 @@ deployImages() {
   docker push cyb10101/backup-tools:arm32v7
 
   # Clean up
+  docker rmi $(docker images --filter=reference="cyb10101/backup-tools:latest" -q)
+  docker rmi $(docker images --filter=reference="cyb10101/backup-tools:arm32v7" -q)
   docker rmi $(docker images --filter=reference="golang" -q)
   docker rmi $(docker images --filter=reference="ubuntu:20.04" -q)
   docker rmi $(docker images --filter=reference="multiarch/qemu-user-static:x86_64-arm" -q)
