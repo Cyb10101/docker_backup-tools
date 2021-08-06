@@ -20,12 +20,17 @@ backupDatabase() {
   dbUsername="${2}"
   dbPassword="${3}"
   dbDatabase="${4}"
+  filename="${5}"
+  if [ -z "${filename}" ]; then
+    filename="${dbDatabase}"
+  fi
+
   cronLog 'Backup database...'
   createFolder '/root/backup/databases'
 
   ssh ${SSH_CONNECTION} "mysqldump --opt --skip-comments --host='${dbHost}' --user='${dbUsername}' --password='${dbPassword}' '${dbDatabase}'" \
     | (echo "CREATE DATABASE IF NOT EXISTS \`${dbDatabase}\`;USE \`${dbDatabase}\`;" && cat) \
-    > /root/backup/databases/${dbDatabase}.sql
+    > /root/backup/databases/${filename}.sql
 }
 
 backupFilesystemRdiffBackup() {

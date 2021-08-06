@@ -51,6 +51,12 @@ Backup script example for file `website_www.sh`:
 ```bash
 databaseName='website_www'
 rotateFileOrFolder "/root/backup/databases/${databaseName}.sql" '15'
+
+# Database-Host, Database-Username, Database-Password, Database-Table, SQL-Filename
+backupDatabase 'host' 'username' 'password' "${databaseName}" "${databaseName}"
+backupDatabase 'host' 'username' 'password' "${databaseName}" "other-website_www"
+
+# Deprecated without filname (not recommended)
 backupDatabase 'host' 'username' 'password' "${databaseName}"
 ```
 
