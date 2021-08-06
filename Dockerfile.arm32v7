@@ -19,7 +19,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
     TIMEZONE=Europe/Berlin
 
 RUN apt-get update && \
-    apt-get install -y supervisor rsyslog openssh-client less vim tzdata cron php php-curl rsync rdiff-backup restic && \
+    apt-get install -y supervisor rsyslog openssh-client sshfs less vim tzdata cron php php-curl rsync rdiff-backup restic && \
     restic self-update && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
