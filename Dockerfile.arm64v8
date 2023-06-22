@@ -1,14 +1,17 @@
+FROM multiarch/qemu-user-static:x86_64-aarch64 as qemu
+
 # Go compiler
 FROM golang as builder
-ENV GOOS="linux" GOARCH="amd64"
+ENV GOOS="linux" GOARCH="arm64"
 WORKDIR /go/src/rotate
 COPY go/ /go/
 RUN go build rotate.go
 
 # Main
-FROM ubuntu:22.04
+FROM arm64v8/ubuntu:22.04
+COPY --from=qemu /usr/bin/qemu-aarch64-static /usr/bin/
 
-RUN mkdir -p /opt/docker && echo "amd64" > /opt/docker/architecture
+RUN mkdir -p /opt/docker && echo "arm64v8" > /opt/docker/architecture
 ENV DEBIAN_FRONTEND=noninteractive \
     TIMEZONE="Europe/Berlin" \
     LANGUAGE="de_DE"

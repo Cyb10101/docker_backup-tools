@@ -145,27 +145,69 @@ symfonyClearCache() {
 }
 
 deployImages() {
-  # Default: 32 bit & 64 bit
+  # Default: 64 bit
   docker pull golang
-  docker pull ubuntu:20.04
-  docker build --no-cache --file Dockerfile --tag cyb10101/backup-tools:latest .
-  docker push cyb10101/backup-tools:latest
+  docker pull ubuntu:22.04
+  docker build --no-cache --file Dockerfile --tag cyb10101/backup-tools:amd64 .
+  docker push cyb10101/backup-tools:amd64
+
+  # Arm64v8
+  docker pull multiarch/qemu-user-static:x86_64-aarch64
+  docker pull arm64v8/ubuntu:22.04
+  docker run --rm --privileged multiarch/qemu-user-static:register --reset
+  set +e
+  docker build --no-cache --file Dockerfile.arm64v8 --tag cyb10101/backup-tools:arm64v8 .
+  set -e
+  read -p 'ARM64v8 compile successful? [y/N] ' -n 1 -r; echo ''
+  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
+  fi
+  docker push cyb10101/backup-tools:arm64v8
 
   # Arm32v7
   docker pull multiarch/qemu-user-static:x86_64-arm
-  docker pull arm32v7/ubuntu:20.04
+  docker pull arm32v7/ubuntu:22.04
   docker run --rm --privileged multiarch/qemu-user-static:register --reset
+  set +e
   docker build --no-cache --file Dockerfile.arm32v7 --tag cyb10101/backup-tools:arm32v7 .
+  set -e
+  read -p 'ARM32v7 compile successful? [y/N] ' -n 1 -r; echo ''
+  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
+  fi
   docker push cyb10101/backup-tools:arm32v7
+
+  # Create manifest
+  docker manifest create cyb10101/backup-tools:latest \
+    --amend docker.io/cyb10101/backup-tools:amd64 \
+    --amend docker.io/cyb10101/backup-tools:arm64v8 \
+    --amend docker.io/cyb10101/backup-tools:arm32v7
+
+  docker manifest push --purge cyb10101/backup-tools:latest
 
   # Clean up
   set +e
-  docker rmi $(docker images --filter=reference="cyb10101/backup-tools:latest" -q)
-  docker rmi $(docker images --filter=reference="cyb10101/backup-tools:arm32v7" -q)
-  docker rmi $(docker images --filter=reference="golang" -q)
-  docker rmi $(docker images --filter=reference="ubuntu:20.04" -q)
-  docker rmi $(docker images --filter=reference="multiarch/qemu-user-static:x86_64-arm" -q)
-  docker rmi $(docker images --filter=reference="arm32v7/ubuntu:20.04" -q)
+  read -p 'Remove ARM images? [y/N] ' -n 1 -r; echo ''
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    docker rmi $(docker images --filter=reference="cyb10101/backup-tools:arm64v8" -q)
+    docker rmi $(docker images --filter=reference="cyb10101/backup-tools:arm32v7" -q)
+
+    docker rmi $(docker images --filter=reference="multiarch/qemu-user-static:x86_64-aarch64" -q)
+    docker rmi $(docker images --filter=reference="multiarch/qemu-user-static:x86_64-arm" -q)
+
+    docker rmi $(docker images --filter=reference="arm64v8/ubuntu:22.04" -q)
+    docker rmi $(docker images --filter=reference="arm32v7/ubuntu:22.04" -q)
+  fi
+
+  read -p 'Remove Go-Lang images? [y/N] ' -n 1 -r; echo ''
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    docker rmi $(docker images --filter=reference="golang" -q)
+  fi
+
+  read -p 'Remove Ubuntu images? [y/N] ' -n 1 -r; echo ''
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    docker rmi $(docker images --filter=reference="ubuntu:22.04" -q)
+  fi
   set -e
 }
 
@@ -180,7 +222,7 @@ runDeploy() {
 
     # Task 2: Deploy as user in container (Docker)
     #startFunction start
-    #startFunction exec-web ./start.sh deployDirect
+    #startFunction exec-app ./start.sh deployDirect
 
     # Task 2: Deploy as user in system (Switch from root to user)
     #if [ -z "${RUN_AS_USERNAME}" ]; then echo 'Error variable RUN_AS_USERNAME is empty!'; exit 1; fi
@@ -225,19 +267,19 @@ startFunction() {
             dockerComposeCmd down --remove-orphans
         ;;
         login-root)
-            dockerComposeCmd exec web bash
+            dockerComposeCmd exec app bash
         ;;
         login)
             startFunction bash
         ;;
         bash)
-            dockerComposeCmd exec -u ${APPLICATION_USER} web bash
+            dockerComposeCmd exec -u ${APPLICATION_USER} app bash
         ;;
         zsh)
-            dockerComposeCmd exec -u ${APPLICATION_USER} web zsh
+            dockerComposeCmd exec -u ${APPLICATION_USER} app zsh
         ;;
-        exec-web)
-            dockerComposeCmd exec -u ${APPLICATION_USER} web "${@:2}"
+        exec-app)
+            dockerComposeCmd exec -u ${APPLICATION_USER} app "${@:2}"
         ;;
         deploy-images)
           deployImages
