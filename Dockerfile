@@ -6,7 +6,7 @@ COPY go/ /go/
 RUN go build rotate.go
 
 # Main
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 RUN mkdir -p /opt/docker && echo "amd64" > /opt/docker/architecture
 ENV DEBIAN_FRONTEND=noninteractive \

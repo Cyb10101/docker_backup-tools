@@ -147,13 +147,13 @@ symfonyClearCache() {
 deployImages() {
   # Default: 64 bit
   docker pull golang
-  docker pull ubuntu:22.04
+  docker pull ubuntu:24.04
   docker build --no-cache --file Dockerfile --tag cyb10101/backup-tools:amd64 .
   docker push cyb10101/backup-tools:amd64
 
   # Arm64v8
   docker pull multiarch/qemu-user-static:x86_64-aarch64
-  docker pull arm64v8/ubuntu:22.04
+  docker pull --platform linux/arm64/v8 arm64v8/ubuntu:24.04
   docker run --rm --privileged multiarch/qemu-user-static:register --reset
   set +e
   docker build --no-cache --file Dockerfile.arm64v8 --tag cyb10101/backup-tools:arm64v8 .
@@ -166,7 +166,7 @@ deployImages() {
 
   # Arm32v7
   docker pull multiarch/qemu-user-static:x86_64-arm
-  docker pull arm32v7/ubuntu:22.04
+  docker pull --platform linux/arm/v7 arm32v7/ubuntu:24.04
   docker run --rm --privileged multiarch/qemu-user-static:register --reset
   set +e
   docker build --no-cache --file Dockerfile.arm32v7 --tag cyb10101/backup-tools:arm32v7 .
@@ -195,8 +195,8 @@ deployImages() {
     docker rmi $(docker images --filter=reference="multiarch/qemu-user-static:x86_64-aarch64" -q)
     docker rmi $(docker images --filter=reference="multiarch/qemu-user-static:x86_64-arm" -q)
 
-    docker rmi $(docker images --filter=reference="arm64v8/ubuntu:22.04" -q)
-    docker rmi $(docker images --filter=reference="arm32v7/ubuntu:22.04" -q)
+    docker rmi $(docker images --filter=reference="arm64v8/ubuntu:24.04" -q)
+    docker rmi $(docker images --filter=reference="arm32v7/ubuntu:24.04" -q)
   fi
 
   read -p 'Remove Go-Lang images? [y/N] ' -n 1 -r; echo ''
@@ -206,7 +206,7 @@ deployImages() {
 
   read -p 'Remove Ubuntu images? [y/N] ' -n 1 -r; echo ''
   if [[ $REPLY =~ ^[Yy]$ ]]; then
-    docker rmi $(docker images --filter=reference="ubuntu:22.04" -q)
+    docker rmi $(docker images --filter=reference="ubuntu:24.04" -q)
   fi
   set -e
 }
