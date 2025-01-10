@@ -31,8 +31,7 @@ createEntrypoint
 
 # Install apps
 apt-get install -y supervisor rsyslog openssh-client sshfs \
-    less vim tzdata cron ncdu php php-curl rsync rdiff-backup restic && \
-    restic self-update && \
+    less vim tzdata cron curl ncdu php php-curl rsync rdiff-backup restic && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Clean apt
