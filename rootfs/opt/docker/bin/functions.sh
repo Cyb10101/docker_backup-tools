@@ -46,7 +46,7 @@ backupFilesystemRdiffBackup() {
   source="${1}"
   destination="${2}"
   cronLog 'Backup filesystem with rdiff-backup...'
-  rdiff-backup -bv0 ${rdiffExcludes[@]} ${source}/ ${destination}/
+  rdiff-backup --verbosity 0 backup ${rdiffExcludes[@]} ${source}/ ${destination}/
 }
 
 backupFilesystemHardLinks() {
