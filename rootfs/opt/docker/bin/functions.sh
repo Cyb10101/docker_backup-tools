@@ -46,7 +46,14 @@ backupFilesystemRdiffBackup() {
   source="${1}"
   destination="${2}"
   cronLog 'Backup filesystem with rdiff-backup...'
-  rdiff-backup --verbosity 0 backup ${rdiffExcludes[@]} ${source}/ ${destination}/
+  rdiff-backup --use-compatible-timestamps --api-version 201 backup ${rdiffExcludes[@]} ${source}/ ${destination}/
+}
+
+backupFilesystemRdiffBackupOldApi200() {
+  source="${1}"
+  destination="${2}"
+  cronLog 'Backup filesystem with rdiff-backup (Api version 200)...'
+  rdiff-backup --use-compatible-timestamps --api-version 200 backup ${rdiffExcludes[@]} ${source}/ ${destination}/
 }
 
 backupFilesystemHardLinks() {
